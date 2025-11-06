@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  ollama:
+    image: ollama/ollama:0.3.11
+    container_name: ollama
+    expose:
+      - "11434"  # internal exposure only (no host binding)
+    volumes:
+      - ollama_data:/root/.ollama
+    env_file:
+      - ../.env
+    networks:
+      - ollama_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  ollama_data:
+    name: ollama_data
+    external: false
+
+networks:
+  ollama_net:
+    name: ollama_net
+    driver: bridge
