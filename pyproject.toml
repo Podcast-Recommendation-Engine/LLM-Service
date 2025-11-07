@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "grpcio>=1.76.0",
     "grpcio-tools>=1.76.0",
+    "protobuf>=6.33.0",
     "requests>=2.32.5",
 ]

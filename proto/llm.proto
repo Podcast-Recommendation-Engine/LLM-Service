@@ -4,25 +4,25 @@ package ollama;
 
 // Represents a single text chunk
 message TextChunk {
-  string content = 1;      // Chunk text content
-  int32 order = 2;         // Order of the chunk in transcript
-  bool is_last = 3;        // True if this is the last chunk
+  string content = 1;      
+  int32 order = 2;         
+  bool is_last = 3;       
 }
 
 // Metadata generated for a chunk
 message ChunkMetadata {
-  int32 order = 1;             // Chunk order
-  string title = 2;            // Suggested title for this chunk
-  string description = 3;      // Short summary/description
-  repeated string keywords = 4; // Keywords
-  string topic = 5;            // Main topic/category
+  int32 order = 1;             
+  string title = 2;            
+  string description = 3;      
+  repeated string keywords = 4; 
+  string topic = 5;            
 }
 
 // Request to generate metadata for a single chunk
 message GenerateChunkRequest {
   string model = 1;
   TextChunk chunk = 2;
-  int32 max_tokens = 3;       // Optional: max tokens for generation
+  int32 max_tokens = 3;     
 }
 
 // Response with metadata for a single chunk
@@ -33,23 +33,20 @@ message GenerateChunkResponse {
 // Request to aggregate multiple chunk metadata into an episode
 message AggregateRequest {
   string model = 1;
-  repeated ChunkMetadata chunk_metadata = 2; // Ordered chunk metadata
+  repeated ChunkMetadata chunk_metadata = 2; 
   int32 max_tokens = 3;
 }
 
 // Response with aggregated episode metadata
 message AggregateResponse {
-  string title = 1;              // Episode title
-  string description = 2;        // Episode description
-  repeated string keywords = 3;  // Aggregated keywords
-  string topic = 4;              // Dominant episode topic
+  string title = 1;              
+  string description = 2;        
+  repeated string keywords = 3;  
+  string topic = 4;              
 }
   
 // Ollama gRPC service
 service Ollama {
-  // Generate metadata for a single chunk
   rpc GenerateChunk (GenerateChunkRequest) returns (GenerateChunkResponse);
-
-  // Aggregate all chunk metadata into one coherent episode
   rpc AggregateChunks (AggregateRequest) returns (AggregateResponse);
 }
