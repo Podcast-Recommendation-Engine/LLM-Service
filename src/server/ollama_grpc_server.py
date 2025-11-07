@@ -6,8 +6,8 @@ import json
 import logging
 
 # Import the generated modules
-import llm_pb2
-import llm_pb2_grpc
+import llm_pb2 as llm_pb2
+import llm_pb2_grpc as llm_pb2_grpc
 
 log = logging.getLogger(__name__)
 
@@ -20,6 +20,7 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         # Step 1: Get info from request
         chunk_content = request.chunk.content
         chunk_order = request.chunk.order
+        max_tokens = request.max_tokens
 
         # Step 2: Prepare data for Ollama
         prompt = (
@@ -29,11 +30,13 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             f"Text: {chunk_content}"
         )
 
-        url = "http://ollama:11434/api/generate"
+        url = "http://localhost:11434/api/generate"
         payload = {
             "prompt": prompt,
             "model": "llama3.2:3b",
-            "stream": False
+            "stream": False,
+            "format": "json" ,
+            "num_predict": max_tokens
         }
 
         headers = {"Content-Type": "application/json"}
@@ -59,7 +62,7 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             metadata_json = {}
 
         # Step 5: Build response metadata
-        metadata = llm_pb2.ChunkMetadata(
+        metadata = llm_pb2.ChunkMetadata( # type: ignore
             order=chunk_order,
             title=metadata_json.get("title", ""),
             description=metadata_json.get("description", ""),
@@ -67,7 +70,7 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             topic=metadata_json.get("topic", "")
         )
 
-        return llm_pb2.GenerateChunkResponse(metadata=metadata)
+        return llm_pb2.GenerateChunkResponse(metadata=metadata) # type: ignore
 
     def AggregateChunks(self, request, context):
         # Step 1: Extract relevaant info
@@ -103,11 +106,12 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             - topic
         """
          
-        url = "http://ollama:11434/api/generate"
+        url = "http://localhost:11434/api/generate"
         payload = {
             "prompt": prompt,
-            "model": model_name,
-            "stream": False
+            "model": "llama3.2:3b",
+            "stream": False,
+            "format": "json"  # This tells Ollama to return JSON
         }
 
         headers = {"Content-Type": "application/json"}
@@ -119,7 +123,7 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         except requests.RequestException as e:
             log.error(f"Ollama aggregation failed for model {model_name}: {e}")
 
-            return llm_pb2.AggregateResponse(
+            return llm_pb2.AggregateResponse( # type: ignore
             title="", description="", keywords=[], topic=""
             )
 
@@ -133,13 +137,14 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             log.error("Failed to parse JSON from Ollama output")
             metadata_json = {}
        
-        return llm_pb2.AggregateResponse(
+        return llm_pb2.AggregateResponse( # type: ignore
             title=metadata_json.get("title", ""),
             description=metadata_json.get("description", ""),
             keywords=metadata_json.get("keywords", []),
             topic=metadata_json.get("topic", "")
         )
     
+
 
 
 

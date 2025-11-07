@@ -37,13 +37,13 @@ class OllamaStub(object):
         """
         self.GenerateChunk = channel.unary_unary(
                 '/ollama.Ollama/GenerateChunk',
-                request_serializer=llm__pb2.GenerateChunkRequest.SerializeToString,
-                response_deserializer=llm__pb2.GenerateChunkResponse.FromString,
+                request_serializer=llm__pb2.GenerateChunkRequest.SerializeToString, # type: ignore
+                response_deserializer=llm__pb2.GenerateChunkResponse.FromString, # type: ignore
                 _registered_method=True)
         self.AggregateChunks = channel.unary_unary(
                 '/ollama.Ollama/AggregateChunks',
-                request_serializer=llm__pb2.AggregateRequest.SerializeToString,
-                response_deserializer=llm__pb2.AggregateResponse.FromString,
+                request_serializer=llm__pb2.AggregateRequest.SerializeToString, # type: ignore
+                response_deserializer=llm__pb2.AggregateResponse.FromString, # type: ignore
                 _registered_method=True)
 
 
@@ -70,13 +70,13 @@ def add_OllamaServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GenerateChunk': grpc.unary_unary_rpc_method_handler(
                     servicer.GenerateChunk,
-                    request_deserializer=llm__pb2.GenerateChunkRequest.FromString,
-                    response_serializer=llm__pb2.GenerateChunkResponse.SerializeToString,
+                    request_deserializer=llm__pb2.GenerateChunkRequest.FromString, # type: ignore
+                    response_serializer=llm__pb2.GenerateChunkResponse.SerializeToString, # type: ignore
             ),
             'AggregateChunks': grpc.unary_unary_rpc_method_handler(
                     servicer.AggregateChunks,
-                    request_deserializer=llm__pb2.AggregateRequest.FromString,
-                    response_serializer=llm__pb2.AggregateResponse.SerializeToString,
+                    request_deserializer=llm__pb2.AggregateRequest.FromString, # type: ignore
+                    response_serializer=llm__pb2.AggregateResponse.SerializeToString, # type: ignore
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -101,12 +101,12 @@ class Ollama(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(
+        return grpc.experimental.unary_unary( # type: ignore
             request,
             target,
             '/ollama.Ollama/GenerateChunk',
-            llm__pb2.GenerateChunkRequest.SerializeToString,
-            llm__pb2.GenerateChunkResponse.FromString,
+            llm__pb2.GenerateChunkRequest.SerializeToString, # type: ignore
+            llm__pb2.GenerateChunkResponse.FromString, # type: ignore
             options,
             channel_credentials,
             insecure,
@@ -128,12 +128,12 @@ class Ollama(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(
+        return grpc.experimental.unary_unary( # type: ignore
             request,
             target,
             '/ollama.Ollama/AggregateChunks',
-            llm__pb2.AggregateRequest.SerializeToString,
-            llm__pb2.AggregateResponse.FromString,
+            llm__pb2.AggregateRequest.SerializeToString, # type: ignore
+            llm__pb2.AggregateResponse.FromString, # type: ignore
             options,
             channel_credentials,
             insecure,
