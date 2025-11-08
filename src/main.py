@@ -1,4 +1,5 @@
-from utils.storage import StorageManager
+from proto import llm_pb2
+from proto import llm_pb2_grpc
 
 
-source_file = "data/raw/transcript.txt"
+

@@ -1,13 +1,13 @@
 from concurrent import futures
+from pathlib import Path
+import sys
 import time
 import grpc
 import requests
 import json
 import logging
+from src.proto import llm_pb2, llm_pb2_grpc
 
-# Import the generated modules
-import llm_pb2 as llm_pb2
-import llm_pb2_grpc as llm_pb2_grpc
 
 log = logging.getLogger(__name__)
 

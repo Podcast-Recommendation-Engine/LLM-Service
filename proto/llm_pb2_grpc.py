@@ -37,13 +37,13 @@ class OllamaStub(object):
         """
         self.GenerateChunk = channel.unary_unary(
                 '/ollama.Ollama/GenerateChunk',
-                request_serializer=llm__pb2.GenerateChunkRequest.SerializeToString, # type: ignore
-                response_deserializer=llm__pb2.GenerateChunkResponse.FromString, # type: ignore
+                request_serializer=llm__pb2.GenerateChunkRequest.SerializeToString,
+                response_deserializer=llm__pb2.GenerateChunkResponse.FromString,
                 _registered_method=True)
         self.AggregateChunks = channel.unary_unary(
                 '/ollama.Ollama/AggregateChunks',
-                request_serializer=llm__pb2.AggregateRequest.SerializeToString, # type: ignore
-                response_deserializer=llm__pb2.AggregateResponse.FromString, # type: ignore
+                request_serializer=llm__pb2.AggregateRequest.SerializeToString,
+                response_deserializer=llm__pb2.AggregateResponse.FromString,
                 _registered_method=True)
 
 
@@ -52,15 +52,13 @@ class OllamaServicer(object):
     """
 
     def GenerateChunk(self, request, context):
-        """Generate metadata for a single chunk
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def AggregateChunks(self, request, context):
-        """Aggregate all chunk metadata into one coherent episode
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -70,13 +68,13 @@ def add_OllamaServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GenerateChunk': grpc.unary_unary_rpc_method_handler(
                     servicer.GenerateChunk,
-                    request_deserializer=llm__pb2.GenerateChunkRequest.FromString, # type: ignore
-                    response_serializer=llm__pb2.GenerateChunkResponse.SerializeToString, # type: ignore
+                    request_deserializer=llm__pb2.GenerateChunkRequest.FromString,
+                    response_serializer=llm__pb2.GenerateChunkResponse.SerializeToString,
             ),
             'AggregateChunks': grpc.unary_unary_rpc_method_handler(
                     servicer.AggregateChunks,
-                    request_deserializer=llm__pb2.AggregateRequest.FromString, # type: ignore
-                    response_serializer=llm__pb2.AggregateResponse.SerializeToString, # type: ignore
+                    request_deserializer=llm__pb2.AggregateRequest.FromString,
+                    response_serializer=llm__pb2.AggregateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -101,12 +99,12 @@ class Ollama(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary( # type: ignore
+        return grpc.experimental.unary_unary(
             request,
             target,
             '/ollama.Ollama/GenerateChunk',
-            llm__pb2.GenerateChunkRequest.SerializeToString, # type: ignore
-            llm__pb2.GenerateChunkResponse.FromString, # type: ignore
+            llm__pb2.GenerateChunkRequest.SerializeToString,
+            llm__pb2.GenerateChunkResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -128,12 +126,12 @@ class Ollama(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary( # type: ignore
+        return grpc.experimental.unary_unary(
             request,
             target,
             '/ollama.Ollama/AggregateChunks',
-            llm__pb2.AggregateRequest.SerializeToString, # type: ignore
-            llm__pb2.AggregateResponse.FromString, # type: ignore
+            llm__pb2.AggregateRequest.SerializeToString,
+            llm__pb2.AggregateResponse.FromString,
             options,
             channel_credentials,
             insecure,

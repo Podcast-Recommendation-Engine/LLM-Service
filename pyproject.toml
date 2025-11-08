@@ -8,5 +8,6 @@ dependencies = [
     "grpcio>=1.76.0",
     "grpcio-tools>=1.76.0",
     "protobuf>=6.33.0",
+    "python-dotenv>=1.2.1",
     "requests>=2.32.5",
 ]
