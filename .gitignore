@@ -2,3 +2,4 @@
 docs
 *.txt
 __pycache__
+data

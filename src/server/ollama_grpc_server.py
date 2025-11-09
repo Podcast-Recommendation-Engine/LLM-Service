@@ -6,7 +6,11 @@ import grpc
 import requests
 import json
 import logging
-from src.proto import llm_pb2, llm_pb2_grpc
+import os
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+import llm_pb2_grpc
+import llm_pb2
+
 
 
 log = logging.getLogger(__name__)
@@ -123,7 +127,7 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         except requests.RequestException as e:
             log.error(f"Ollama aggregation failed for model {model_name}: {e}")
 
-            return llm_pb2.AggregateResponse( # type: ignore
+            return llm_pb2.AggregateResponse( 
             title="", description="", keywords=[], topic=""
             )
 
@@ -137,17 +141,13 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             log.error("Failed to parse JSON from Ollama output")
             metadata_json = {}
        
-        return llm_pb2.AggregateResponse( # type: ignore
+        return llm_pb2.AggregateResponse( 
             title=metadata_json.get("title", ""),
             description=metadata_json.get("description", ""),
             keywords=metadata_json.get("keywords", []),
             topic=metadata_json.get("topic", "")
         )
     
-
-
-
-
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

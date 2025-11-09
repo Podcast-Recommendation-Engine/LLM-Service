@@ -1,7 +1,10 @@
+import os
+import sys
 import grpc
 import logging
-from proto import llm_pb2_grpc
-from proto import llm_pb2
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+import llm_pb2, llm_pb2_grpc
+
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s: %(message)s",

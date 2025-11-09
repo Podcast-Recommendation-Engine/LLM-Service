@@ -7,10 +7,10 @@ log = logging.getLogger(__name__)
 class StorageManager:
 
     def __init__(self, bronze_dir: str, silver_dir: str, gold_dir: str) -> None:
-        self._assert_exist()
         self.bronze_dir = bronze_dir
         self.silver_dir = silver_dir
         self.gold_dir = gold_dir
+        self._assert_exist()
 
     def save_to_layer(self, layer: str, data: list, filename: str) -> str:
         # Resolve layer path
@@ -44,10 +44,6 @@ class StorageManager:
             with open(file_path, 'r', encoding='utf-8') as existed_file:
                 existing_data = json.load(existed_file)         
             return existing_data
-        
-
-        
-
     
     def _assert_exist(self) -> None:
         """Ensure all directories exist; raise error if missing."""
