@@ -13,21 +13,19 @@ class StorageManager:
         self._assert_exist()
 
     def save_to_layer(self, layer: str, data: list, filename: str) -> str:
-        # Resolve layer path
         layer_path = self._get_layer_path(layer)
         file_path = os.path.join(layer_path, filename)
 
         # Load existing data if file exists
-        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-            try : 
-
+        if os.path.exists(file_path):
+            try:
                 with open(file_path, 'r', encoding='utf-8') as existed_file:
                     existing_data = json.load(existed_file)
-                    existing_data.extend(data)   
+                    existing_data.extend(data)
 
             except json.JSONDecodeError:
-                log.warning(f"File {file_path} contained invalid JSON. Overwriting it.") 
-                existing_data = data     
+                log.warning(f"File {file_path} contained invalid JSON. Overwriting it.")
+                existing_data = data
         else:
             existing_data = data
 
@@ -38,7 +36,7 @@ class StorageManager:
         log.info(f"Saved {len(data)} items to {file_path}")
         return file_path
     
-    def load_from_layer(self, layer: str, filename: str) -> list:
+    def load_from_layer(self, layer: str, filename: str) -> str:
         # Resolve layer path
         layer_path = self._get_layer_path(layer)
         file_path = os.path.join(layer_path, filename)
@@ -48,7 +46,7 @@ class StorageManager:
         # Load existing data if file exists
         else :
             with open(file_path, 'r', encoding='utf-8') as existed_file:
-                existing_data = json.load(existed_file)         
+                existing_data = existed_file.read()         
             return existing_data
     
     def _assert_exist(self) -> None:

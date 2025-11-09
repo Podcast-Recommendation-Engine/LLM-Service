@@ -14,16 +14,11 @@ def get_config():
     class _Config:
         OLLAMA_HOST = os.getenv("OLLAMA_HOST", "localhost")
         OLLAMA_PORT = int(os.getenv("OLLAMA_PORT", 11434))
-        OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "true").lower() in ("1", "true", "yes")
-        OLLAMA_NUM_THREADS = int(os.getenv("OLLAMA_NUM_THREADS", 4))
-        OLLAMA_MAX_LOADED_MODELS = int(os.getenv("OLLAMA_MAX_LOADED_MODELS", 2))
-        CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 512))
+        CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 8000))
+        MAX_TOKENS = int(os.getenv("MAX_TOKENS", 1024))
         OVERLAP_SENTENCES = int(os.getenv("OVERLAP_SENTENCES", 2))
-        MODEL_NAME = os.getenv("MODEL_NAME", "llama2")
-        MAX_RETRIES = int(os.getenv("MAX_RETRIES", 3))
-        REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", 30))
-        BATCH_SIZE = int(os.getenv("BATCH_SIZE", 5))
-
+        MODEL_NAME = os.getenv("MODEL_NAME", "llama3.2:3b")
+        
     # Return a single instance of the config class.
     # Due to @lru_cache, this instance will be cached in memory and reused.
     return _Config()
