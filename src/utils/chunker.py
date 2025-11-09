@@ -13,7 +13,7 @@ class SemanticChunkingManager:
         while i < len(word_list):
             chunk = word_list[i : i + self.chunk_size]
             data.append({
-                'order': len(data),
+                'order': len(data) + 1,
                 'content': ' '.join(chunk),
                 'is_last': False
             })

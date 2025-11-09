@@ -18,10 +18,16 @@ class StorageManager:
         file_path = os.path.join(layer_path, filename)
 
         # Load existing data if file exists
-        if os.path.exists(file_path):
-            with open(file_path, 'r', encoding='utf-8') as existed_file:
-                existing_data = json.load(existed_file)
-                existing_data.extend(data)        
+        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+            try : 
+
+                with open(file_path, 'r', encoding='utf-8') as existed_file:
+                    existing_data = json.load(existed_file)
+                    existing_data.extend(data)   
+
+            except json.JSONDecodeError:
+                log.warning(f"File {file_path} contained invalid JSON. Overwriting it.") 
+                existing_data = data     
         else:
             existing_data = data
 
