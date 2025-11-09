@@ -1,8 +1,10 @@
 import logging
 from pipelines.semantic_pipeline import Pipeline
 from config import get_config
-log = logging.getLogger(__name__)
 from utils.storage import StorageManager
+import time
+
+log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
@@ -29,12 +31,10 @@ def main():
             gold_dir=gold_dir
         )
     
+    init_timestamp = int(time.time())
     episode_metadata = pipeline.aggregate()
-
-    # storagemanager.save_to_layer(layer="silver", data=chunks, filename='chunks_data.json')
-    # Wrap episode_metadata in a list since it's a single dict
+    log.info(f"Time taken : {int(time.time()) - init_timestamp}  ")
     storagemanager.save_to_layer(layer="gold", data=[episode_metadata], filename='episode_data.json')
-    # log.info(f"Pipeline completed with {len(chunks)} chunks.")
 
 if __name__ == "__main__":
     main()

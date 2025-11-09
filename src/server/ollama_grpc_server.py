@@ -108,7 +108,7 @@ Return ONLY a valid JSON object with fields: title, description, keywords (list)
 
 def serve():
     log.info("Starting gRPC server on port 50051...")
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
     llm_pb2_grpc.add_OllamaServicer_to_server(OllamaServicer(), server)
     server.add_insecure_port("[::]:50051")
     server.start()
