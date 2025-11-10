@@ -18,6 +18,7 @@ def get_config():
         MAX_TOKENS = int(os.getenv("MAX_TOKENS", 1024))
         OVERLAP_SENTENCES = int(os.getenv("OVERLAP_SENTENCES", 2))
         MODEL_NAME = os.getenv("MODEL_NAME", "llama3.2:3b")
+        MAX_WORKERS = int(os.getenv("MAX_WORKERS", 2))
         
     # Return a single instance of the config class.
     # Due to @lru_cache, this instance will be cached in memory and reused.

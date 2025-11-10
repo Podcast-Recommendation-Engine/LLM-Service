@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from pipelines.semantic_pipeline import Pipeline
 from config import get_config
@@ -28,11 +29,12 @@ def main():
             window_overlap=config.OVERLAP_SENTENCES,
             bronze_dir=bronze_dir,
             silver_dir=silver_dir,
-            gold_dir=gold_dir
+            gold_dir=gold_dir,
+            max_wokers= config.MAX_WORKERS
         )
     
     init_timestamp = int(time.time())
-    episode_metadata = pipeline.aggregate()
+    episode_metadata =  pipeline.aggregate()
     log.info(f"Time taken : {int(time.time()) - init_timestamp}  ")
     storagemanager.save_to_layer(layer="gold", data=[episode_metadata], filename='episode_data.json')
 
