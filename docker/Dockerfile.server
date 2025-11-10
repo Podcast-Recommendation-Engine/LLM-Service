@@ -1,0 +1,26 @@
+FROM python:3.13-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy pyproject.toml and install dependencies
+COPY pyproject.toml ./
+RUN pip install -e .
+
+# Copy proto file
+COPY proto/llm.proto ./proto/
+# Copy server implementation
+COPY server/ollama_grpc_server.py ./server/
+
+# Generate gRPC files from proto
+RUN python -m grpc_tools.protoc \
+    --python_out=./server \
+    --grpc_python_out=./server \
+    --proto_path=./proto \
+    llm.proto
+
+# Expose the gRPC port
+EXPOSE 50051
+
+# Run the server
+CMD ["python", "./server/ollama_grpc_server.py"]

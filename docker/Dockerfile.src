@@ -1,0 +1,30 @@
+FROM python:3.13-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy pyproject.toml and install dependencies
+COPY pyproject.toml ./
+RUN pip install -e .
+
+# Copy proto file
+COPY proto/llm.proto ./proto/
+
+# Copy source code first
+COPY src/ ./src/
+
+# Generate gRPC files into existing client folder
+RUN python -m grpc_tools.protoc \
+    --python_out=./src/client \
+    --grpc_python_out=./src/client \
+    --proto_path=./proto \
+    llm.proto
+
+# Copy data directory
+COPY data/ ./data/
+
+# Set PYTHONPATH to include src directory
+ENV PYTHONPATH=/app/src
+
+# Run the main application
+CMD ["python", "./src/main.py"]

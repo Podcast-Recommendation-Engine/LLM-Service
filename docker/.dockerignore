@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+docs/
+
+# Data files (exclude from build, mount as volumes instead)
+data/bronze/*
+data/silver/*
+data/gold/*
+
+# Environment files
+.env
+.env.*
+
+# Dependencies lock
+uv.lock
+
+# Docker
+docker-compose.yml
+Dockerfile*
+.dockerignore
+
+# Misc
+*.log
+.DS_Store

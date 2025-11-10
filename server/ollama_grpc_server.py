@@ -34,7 +34,7 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             f"Text: {chunk_content}"
         )
 
-        url = "http://localhost:11434/api/generate"
+        url = "http://ollama:11434/api/generate"
         payload = {
             "prompt": prompt,
             "model": model_name,
@@ -48,6 +48,9 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
             response.raise_for_status()
             result_text = response.json().get("response", "")
             metadata_json = json.loads(result_text)
+            
+            # Debug logging - show the actual result
+            log.info(f"GenerateChunk: Chunk {chunk_order} result: {metadata_json}")
             log.info(f"GenerateChunk: Chunk {chunk_order} completed successfully")
         except (requests.RequestException, json.JSONDecodeError) as e:
             log.error(f"GenerateChunk: Chunk {chunk_order} failed - {e}")
@@ -81,7 +84,7 @@ Chunk metadata:
 {combined_meta}
 Return ONLY a valid JSON object with fields: title, description, keywords (list), topic."""
 
-        url = "http://localhost:11434/api/generate"
+        url = "http://ollama:11434/api/generate"
         payload = {
             "prompt": prompt,
             "model": model_name,
@@ -94,6 +97,9 @@ Return ONLY a valid JSON object with fields: title, description, keywords (list)
             response.raise_for_status()
             result_text = response.json().get("response", "")
             metadata_json = json.loads(result_text)
+            
+            # Debug logging - show the aggregation result
+            log.info(f"AggregateChunks: Final result: {metadata_json}")
             log.info("AggregateChunks: Aggregation completed successfully")
         except (requests.RequestException, json.JSONDecodeError) as e:
             log.error(f"AggregateChunks: Aggregation failed - {e}")

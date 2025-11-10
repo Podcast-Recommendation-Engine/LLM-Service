@@ -10,13 +10,11 @@ logging.basicConfig(level=logging.INFO)
 
 
 def main():
-    log.info("Starting pipeline************************************************")
+    log.info("Starting pipeline *****************************************************************************")
     config = get_config()
-
     bronze_dir= "./data/bronze"
     silver_dir= "./data/silver"
     gold_dir= "./data/gold"
-    full_episode = "../data/bronze/transcript.txt"
 
     storagemanager = StorageManager(bronze_dir=bronze_dir, silver_dir=silver_dir, gold_dir=gold_dir)
     full_episode_data = storagemanager.load_from_layer(layer="bronze", filename="transcript.txt")
@@ -35,7 +33,7 @@ def main():
     
     init_timestamp = int(time.time())
     episode_metadata =  pipeline.aggregate()
-    log.info(f"Time taken : {int(time.time()) - init_timestamp}  ")
+    log.info(f"Time taken : {int(time.time()) - init_timestamp}  s")
     storagemanager.save_to_layer(layer="gold", data=[episode_metadata], filename='episode_data.json')
 
 if __name__ == "__main__":
