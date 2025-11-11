@@ -55,7 +55,12 @@ cd docker
 docker-compose up --build -d
 ```
 
-5. Run the application:
+5. Pull the required Ollama model:
+```bash
+ollama pull llama3.2:3b
+```
+
+6. Run the application:
 ```bash
 python src/main.py
 ```
