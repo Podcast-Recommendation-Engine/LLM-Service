@@ -27,12 +27,18 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         
         log.info(f"GenerateChunk: Processing chunk {chunk_order}")
 
-        prompt = (
-            "You are a text summarizer. "
-            "Given the following text, return a JSON object with fields: "
-            "`title`, `description`, `keywords` (list), and `topic`. "
-            f"Text: {chunk_content}"
-        )
+        prompt = f"""You are an expert text analyzer and summarizer. Carefully analyze the following text and extract comprehensive metadata.
+
+REQUIREMENTS:
+- title: Create a clear, descriptive title that captures the main subject
+- description: Write a detailed 3-4 sentence description explaining what this text covers, including key points, context, and main ideas discussed
+- keywords: Extract 5-8 relevant keywords or phrases that best represent the content
+- topic: Identify the primary topic/category (e.g., Technology, Health, Politics, Entertainment, etc.)
+
+TEXT TO ANALYZE:
+{chunk_content}
+
+Return ONLY a valid JSON object with the exact fields: title, description, keywords, topic"""
 
         url = "http://ollama:11434/api/generate"
         payload = {
@@ -71,6 +77,9 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         chunk_metadata_list = request.chunk_metadata
         
         log.info(f"AggregateChunks: Aggregating {len(chunk_metadata_list)} chunks")
+        
+        # Debug: Show what chunks we're aggregating
+        log.info(f"AggregateChunks: Input chunks: {[f'Chunk {m.order}: {m.title}' for m in chunk_metadata_list]}")
 
         meta_texts = [
             f"Chunk {m.order}: Title: {m.title}; Description: {m.description}; Keywords: {', '.join(m.keywords)}; Topic: {m.topic}"
@@ -78,11 +87,20 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         ]
         combined_meta = "\n".join(meta_texts)
         
-        prompt = f"""You are an expert text aggregator.
-Given the following chunk metadata, generate a single coherent summary for the entire episode.
-Chunk metadata:
-{combined_meta}
-Return ONLY a valid JSON object with fields: title, description, keywords (list), topic."""
+        prompt = f"""You are an expert content aggregator. Analyze the following chunk metadata from different parts of the same episode and create a comprehensive summary.
+
+        IMPORTANT: You must create a NEW aggregated summary, not just copy one chunk.
+
+        Individual Chunks:
+        {combined_meta}
+
+        Create a JSON response with:
+        - title: A comprehensive title covering the main themes
+        - description: A detailed 2-3 sentence description covering all major topics discussed
+        - keywords: A combined list of the most important keywords from all chunks
+        - topic: The primary overarching topic or "Mixed Topics" if diverse
+
+        Return ONLY valid JSON:"""
 
         url = "http://ollama:11434/api/generate"
         payload = {
