@@ -54,7 +54,8 @@ class Pipeline:
                     metadata_chunked.append(future.result())
                 except Exception as e:
                     logging.error(f"Chunk {order} failed : {e}")
-
+        
+        metadata_chunked.sort(key=lambda x: x["order"])
         elapsed = int(time.time() - start)
         logging.info(f"Chunk processing finished in {elapsed}s. {len(metadata_chunked)}/{len(data)} chunks processed.")
         self.storagemanager.save_to_layer("silver", metadata_chunked, f"{self.filename}-llm.json")
