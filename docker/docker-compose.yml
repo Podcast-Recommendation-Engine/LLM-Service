@@ -24,20 +24,20 @@ services:
     depends_on:
       - ollama
 
-  llm-service:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.src
-    container_name: llm-service
-    env_file:
-      - ../.env
-    networks:
-      - podcast-network
-    depends_on:
-      - ollama
-      - grpc-server
-    volumes:
-      - ../data:/app/data
+  # llm-service:
+  #   build:
+  #     context: ..
+  #     dockerfile: docker/Dockerfile.src
+  #   container_name: llm-service
+  #   env_file:
+  #     - ../.env
+  #   networks:
+  #     - podcast-network
+  #   depends_on:
+  #     - ollama
+  #     - grpc-server
+  #   volumes:
+  #     - ../data:/app/data
 
 volumes:
   podcast-data:
