@@ -17,37 +17,22 @@ cfg = get_config()
 def process_pipeline(msg):
     full_episode = msg.get('transcription')
     filename = msg.get('title')
-    # Sanitize filename: remove/replace illegal characters
-    filename = re.sub(r'[<>:"/\\|?*]', '', filename)  # Remove illegal chars
-    # filename = filename.strip()  
+    filename = re.sub(r'[<>:"/\\|?*]', '', filename)  # Remove illegal chars in order to make it storable
     
     if not filename.endswith('.json'):
         filename = f"{filename}.json"
 
-    pipeline = Pipeline( 
-        full_episode, 
-        filename,
-        f"{cfg.OLLAMA_HOST}:{cfg.OLLAMA_PORT}", 
-        cfg.MAX_TOKENS, 
-        cfg.MODEL_NAME,
-        cfg.CHUNK_SIZE, 
-        cfg.OVERLAP_SENTENCES, 
-        raw_data, 
-        processed_data,
-        aggregated_data,
-        max_wokers=cfg.MAX_WORKERS
-    )
-    
-    init_timestamp = int(time.time())
+    pipeline = Pipeline(  full_episode,  filename, f"{cfg.OLLAMA_HOST}:{cfg.OLLAMA_PORT}", cfg.MAX_TOKENS, cfg.MODEL_NAME, cfg.CHUNK_SIZE, cfg.OVERLAP_SENTENCES, raw_data, processed_data, aggregated_data, max_wokers=cfg.MAX_WORKERS)
     episode_metadata = pipeline.aggregate()
-    logging.info(f"Time taken : {int(time.time()) - init_timestamp}  s")
     
     if storagemanager is not None:
         storagemanager.save_to_layer(layer="gold", data=[episode_metadata], filename=filename)
 
     # Merge with the original message
     enriched_msg = msg.copy()
-    enriched_msg["metadata"] = episode_metadata
+    enriched_msg["description"] = episode_metadata["description"]
+    enriched_msg["keywords"] = episode_metadata["keywords"]
+    enriched_msg["topic"] = episode_metadata["topic"]
     with open(f"data/gold/enriched_metadata/{filename}", "w", encoding="utf-8") as f:
         json.dump(enriched_msg, f, indent=2, ensure_ascii=False)
     return enriched_msg
