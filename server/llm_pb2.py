@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tllm.proto\x12\x06ollama\"<\n\tTextChunk\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\r\n\x05order\x18\x02 \x01(\x05\x12\x0f\n\x07is_last\x18\x03 \x01(\x08\"c\n\rChunkMetadata\x12\r\n\x05order\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x10\n\x08keywords\x18\x04 \x03(\t\x12\r\n\x05topic\x18\x05 \x01(\t\"[\n\x14GenerateChunkRequest\x12\r\n\x05model\x18\x01 \x01(\t\x12 \n\x05\x63hunk\x18\x02 \x01(\x0b\x32\x11.ollama.TextChunk\x12\x12\n\nmax_tokens\x18\x03 \x01(\x05\"@\n\x15GenerateChunkResponse\x12\'\n\x08metadata\x18\x01 \x01(\x0b\x32\x15.ollama.ChunkMetadata\"d\n\x10\x41ggregateRequest\x12\r\n\x05model\x18\x01 \x01(\t\x12-\n\x0e\x63hunk_metadata\x18\x02 \x03(\x0b\x32\x15.ollama.ChunkMetadata\x12\x12\n\nmax_tokens\x18\x03 \x01(\x05\"X\n\x11\x41ggregateResponse\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08keywords\x18\x03 \x03(\t\x12\r\n\x05topic\x18\x04 \x01(\t2\x9e\x01\n\x06Ollama\x12L\n\rGenerateChunk\x12\x1c.ollama.GenerateChunkRequest\x1a\x1d.ollama.GenerateChunkResponse\x12\x46\n\x0f\x41ggregateChunks\x12\x18.ollama.AggregateRequest\x1a\x19.ollama.AggregateResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tllm.proto\x12\x06ollama\"<\n\tTextChunk\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\r\n\x05order\x18\x02 \x01(\x05\x12\x0f\n\x07is_last\x18\x03 \x01(\x08\"T\n\rChunkMetadata\x12\r\n\x05order\x18\x01 \x01(\x05\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08keywords\x18\x03 \x03(\t\x12\r\n\x05topic\x18\x04 \x01(\t\"[\n\x14GenerateChunkRequest\x12\r\n\x05model\x18\x01 \x01(\t\x12 \n\x05\x63hunk\x18\x02 \x01(\x0b\x32\x11.ollama.TextChunk\x12\x12\n\nmax_tokens\x18\x03 \x01(\x05\"@\n\x15GenerateChunkResponse\x12\'\n\x08metadata\x18\x01 \x01(\x0b\x32\x15.ollama.ChunkMetadata\"d\n\x10\x41ggregateRequest\x12\r\n\x05model\x18\x01 \x01(\t\x12-\n\x0e\x63hunk_metadata\x18\x02 \x03(\x0b\x32\x15.ollama.ChunkMetadata\x12\x12\n\nmax_tokens\x18\x03 \x01(\x05\"I\n\x11\x41ggregateResponse\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x10\n\x08keywords\x18\x02 \x03(\t\x12\r\n\x05topic\x18\x03 \x01(\t2\x9e\x01\n\x06Ollama\x12L\n\rGenerateChunk\x12\x1c.ollama.GenerateChunkRequest\x1a\x1d.ollama.GenerateChunkResponse\x12\x46\n\x0f\x41ggregateChunks\x12\x18.ollama.AggregateRequest\x1a\x19.ollama.AggregateResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,15 +34,15 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_TEXTCHUNK']._serialized_start=21
   _globals['_TEXTCHUNK']._serialized_end=81
   _globals['_CHUNKMETADATA']._serialized_start=83
-  _globals['_CHUNKMETADATA']._serialized_end=182
-  _globals['_GENERATECHUNKREQUEST']._serialized_start=184
-  _globals['_GENERATECHUNKREQUEST']._serialized_end=275
-  _globals['_GENERATECHUNKRESPONSE']._serialized_start=277
-  _globals['_GENERATECHUNKRESPONSE']._serialized_end=341
-  _globals['_AGGREGATEREQUEST']._serialized_start=343
-  _globals['_AGGREGATEREQUEST']._serialized_end=443
-  _globals['_AGGREGATERESPONSE']._serialized_start=445
-  _globals['_AGGREGATERESPONSE']._serialized_end=533
-  _globals['_OLLAMA']._serialized_start=536
-  _globals['_OLLAMA']._serialized_end=694
+  _globals['_CHUNKMETADATA']._serialized_end=167
+  _globals['_GENERATECHUNKREQUEST']._serialized_start=169
+  _globals['_GENERATECHUNKREQUEST']._serialized_end=260
+  _globals['_GENERATECHUNKRESPONSE']._serialized_start=262
+  _globals['_GENERATECHUNKRESPONSE']._serialized_end=326
+  _globals['_AGGREGATEREQUEST']._serialized_start=328
+  _globals['_AGGREGATEREQUEST']._serialized_end=428
+  _globals['_AGGREGATERESPONSE']._serialized_start=430
+  _globals['_AGGREGATERESPONSE']._serialized_end=503
+  _globals['_OLLAMA']._serialized_start=506
+  _globals['_OLLAMA']._serialized_end=664
 # @@protoc_insertion_point(module_scope)

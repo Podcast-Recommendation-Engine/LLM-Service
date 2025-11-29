@@ -1,8 +1,14 @@
 import os
 import json
 import logging
+import time
 
-log = logging.getLogger(__name__)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s: %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logging.Formatter.converter = time.gmtime
 
 class StorageManager:
 
@@ -21,10 +27,13 @@ class StorageManager:
             try:
                 with open(file_path, 'r', encoding='utf-8') as existed_file:
                     existing_data = json.load(existed_file)
-                    existing_data.extend(data)
-
+                    # Handle both list of items and single dict
+                    if isinstance(existing_data, list):
+                        existing_data.extend(data)
+                    else:
+                        existing_data = data
             except json.JSONDecodeError:
-                log.warning(f"File {file_path} contained invalid JSON. Overwriting it.")
+                logging.warning(f"File {file_path} contained invalid JSON. Overwriting it.")
                 existing_data = data
         else:
             existing_data = data
@@ -33,7 +42,7 @@ class StorageManager:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(existing_data, f, indent=4, ensure_ascii=False)
 
-        log.info(f"Saved {len(data)} items to {file_path}")
+        logging.info(f"Saved {len(data)} items to {file_path}")
         return file_path
     
     def load_from_layer(self, layer: str, filename: str) -> str:

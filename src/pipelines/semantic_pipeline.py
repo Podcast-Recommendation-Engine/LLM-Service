@@ -8,16 +8,21 @@ from processing.episode_processor import EpisodeProcessor
 from utils.chunker import SemanticChunkingManager
 from utils.storage import StorageManager
 
-log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s: %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logging.Formatter.converter = time.gmtime
 
 class Pipeline:
-    def __init__(self, full_episode: str, url: str, max_tokens: int, model_name: str, chunk_size: int, window_overlap: int, bronze_dir: str, silver_dir: str, gold_dir: str, max_wokers: int ) -> None:
+    def __init__(self, full_episode: str, filename: str, url: str, max_tokens: int, model_name: str, chunk_size: int, window_overlap: int, bronze_dir: str, silver_dir: str, gold_dir: str, max_wokers: int ) -> None:
         
         self.bronze_dir = bronze_dir
         self.silver_dir = silver_dir
         self.gold_dir = gold_dir
         self.max_workers = max_wokers
+        self.filename= filename
 
         self.semanticchunkermanager = SemanticChunkingManager(content=full_episode, chunk_size=chunk_size, window_overlap=window_overlap)
         self.storagemanager = StorageManager(bronze_dir=self.bronze_dir, silver_dir=self.silver_dir, gold_dir=self.gold_dir)
@@ -26,7 +31,7 @@ class Pipeline:
 
     def chunk_threaded(self):
         data = self.semanticchunkermanager.chunk_content()
-        self.storagemanager.save_to_layer(layer="silver", data=data, filename="test.json")
+        self.storagemanager.save_to_layer(layer="silver", data=data, filename=self.filename)
 
         metadata_chunked = []
         start = time.time()
@@ -48,11 +53,11 @@ class Pipeline:
                 try:
                     metadata_chunked.append(future.result())
                 except Exception as e:
-                    log.error(f"Chunk {order} failed : {e}")
+                    logging.error(f"Chunk {order} failed : {e}")
 
         elapsed = int(time.time() - start)
-        log.info(f"Chunk processing finished in {elapsed}s. {len(metadata_chunked)}/{len(data)} chunks processed.")
-        self.storagemanager.save_to_layer("silver", metadata_chunked, "chunkfromollama.json")
+        logging.info(f"Chunk processing finished in {elapsed}s. {len(metadata_chunked)}/{len(data)} chunks processed.")
+        self.storagemanager.save_to_layer("silver", metadata_chunked, f"{self.filename}-llm.json")
         return metadata_chunked
 
     def aggregate(self):

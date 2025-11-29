@@ -11,11 +11,10 @@ message TextChunk {
 
 // Metadata generated for a chunk
 message ChunkMetadata {
-  int32 order = 1;             
-  string title = 2;            
-  string description = 3;      
-  repeated string keywords = 4; 
-  string topic = 5;            
+  int32 order = 1;                        
+  string description = 2;      
+  repeated string keywords = 3; 
+  string topic = 4;            
 }
 
 // Request to generate metadata for a single chunk
@@ -38,11 +37,10 @@ message AggregateRequest {
 }
 
 // Response with aggregated episode metadata
-message AggregateResponse {
-  string title = 1;              
-  string description = 2;        
-  repeated string keywords = 3;  
-  string topic = 4;              
+message AggregateResponse {             
+  string description = 1;        
+  repeated string keywords = 2;  
+  string topic = 3;              
 }
   
 // Ollama gRPC service

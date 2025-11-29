@@ -19,6 +19,13 @@ def get_config():
         OVERLAP_SENTENCES = int(os.getenv("OVERLAP_SENTENCES", 2))
         MODEL_NAME = os.getenv("MODEL_NAME", "llama3.2:3b")
         MAX_WORKERS = int(os.getenv("MAX_WORKERS", 2))
+
+        TOPIC_TO_CONSUME = os.getenv('TOPIC_TO_CONSUME', 'podcast_transcription')
+        TOPIC_TO_PRODUCE = os.getenv('TOPIC_TO_PRODUCE', 'enriched_metadata')  # Fixed: was using TOPIC_TO_CONSUME
+        KAFKA_URL = os.getenv("KAFKA_URL", "localhost")
+        KAFKA_PORT = int(os.getenv("KAFKA_PORT", 29092))
+        ACKS = int(os.getenv("ACKS", 1))
+        GROUP_ID = os.getenv('GROUP_ID', 'Nato')
         
     # Return a single instance of the config class.
     # Due to @lru_cache, this instance will be cached in memory and reused.

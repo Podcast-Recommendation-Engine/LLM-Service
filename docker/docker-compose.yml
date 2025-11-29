@@ -6,30 +6,30 @@ services:
     expose:
       - "11434" 
     volumes:
-      - ollama_data:/root/.ollama
+      - podcast-data:/root/.ollama
     networks:
-      - ollama_net
+      - podcast-network
 
   grpc-server:
     build:
       context: ..
       dockerfile: docker/Dockerfile.server
-    container_name: llm-grpc-server
+    container_name: llm
     ports:
       - "50051:50051"
     env_file:
       - ../.env
     networks:
-      - ollama_net
+      - podcast-network
     depends_on:
       - ollama
 
+
 volumes:
-  ollama_data:
-    name: ollama_data
-    external: false
+  podcast-data:
+    external: true
 
 networks:
-  ollama_net:
-    name: ollama_net
+  podcast-network:
     driver: bridge
+    external: true

@@ -1,21 +1,16 @@
 from concurrent import futures
 import sys
+import time
 import grpc
 import requests
 import json
 import logging
 import os
 
+# sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 import llm_pb2_grpc
 import llm_pb2
-
-log = logging.getLogger(__name__)
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
 
 class OllamaServicer(llm_pb2_grpc.OllamaServicer):
     
@@ -27,18 +22,18 @@ class OllamaServicer(llm_pb2_grpc.OllamaServicer):
         
         log.info(f"GenerateChunk: Processing chunk {chunk_order}")
 
-        prompt = f"""You are an expert text analyzer and summarizer. Carefully analyze the following text and extract comprehensive metadata.
+        prompt = f"""
+        You are an expert text analyzer and summarizer. Carefully analyze the following text and extract comprehensive metadata.
 
-REQUIREMENTS:
-- title: Create a clear, descriptive title that captures the main subject
-- description: Write a detailed 3-4 sentence description explaining what this text covers, including key points, context, and main ideas discussed
-- keywords: Extract 5-8 relevant keywords or phrases that best represent the content
-- topic: Identify the primary topic/category (e.g., Technology, Health, Politics, Entertainment, etc.)
+        REQUIREMENTS:
+        - description: Write a detailed 6-8 sentence description explaining what this text covers, including key points, context, and main ideas discussed
+        - keywords: Extract 5-8 relevant keywords or phrases that best represent the content
+        - topic: Identify the primary topic/category (e.g., Technology, Health, Politics, Entertainment, etc.)
 
-TEXT TO ANALYZE:
-{chunk_content}
+        TEXT TO ANALYZE:
+        {chunk_content}
 
-Return ONLY a valid JSON object with the exact fields: title, description, keywords, topic"""
+        Return ONLY a valid JSON object with the exact fields: description, keywords, topic"""
 
         url = "http://ollama:11434/api/generate"
         payload = {
@@ -64,7 +59,6 @@ Return ONLY a valid JSON object with the exact fields: title, description, keywo
 
         metadata = llm_pb2.ChunkMetadata(
             order=chunk_order,
-            title=metadata_json.get("title", ""),
             description=metadata_json.get("description", ""),
             keywords=metadata_json.get("keywords", []),
             topic=metadata_json.get("topic", "")
@@ -79,15 +73,16 @@ Return ONLY a valid JSON object with the exact fields: title, description, keywo
         log.info(f"AggregateChunks: Aggregating {len(chunk_metadata_list)} chunks")
         
         # Debug: Show what chunks we're aggregating
-        log.info(f"AggregateChunks: Input chunks: {[f'Chunk {m.order}: {m.title}' for m in chunk_metadata_list]}")
+        log.info(f"AggregateChunks: Input chunks: {[f'Chunk {m.order}' for m in chunk_metadata_list]}")
 
         meta_texts = [
-            f"Chunk {m.order}: Title: {m.title}; Description: {m.description}; Keywords: {', '.join(m.keywords)}; Topic: {m.topic}"
+            f"Chunk {m.order} ; Description: {m.description}; Keywords: {', '.join(m.keywords)}; Topic: {m.topic}"
             for m in chunk_metadata_list
         ]
         combined_meta = "\n".join(meta_texts)
         
-        prompt = f"""You are an expert content aggregator. Analyze the following chunk metadata from different parts of the same episode and create a comprehensive summary.
+        prompt = f"""
+        You are an expert content aggregator. Analyze the following chunk metadata from different parts of the same episode and create a comprehensive summary.
 
         IMPORTANT: You must create a NEW aggregated summary, not just copy one chunk.
 
@@ -95,8 +90,7 @@ Return ONLY a valid JSON object with the exact fields: title, description, keywo
         {combined_meta}
 
         Create a JSON response with:
-        - title: A comprehensive title covering the main themes
-        - description: A detailed 2-3 sentence description covering all major topics discussed
+        - description: A detailed 6-8 sentence description covering all major topics discussed
         - keywords: A combined list of the most important keywords from all chunks
         - topic: The primary overarching topic or "Mixed Topics" if diverse
 
@@ -124,7 +118,6 @@ Return ONLY a valid JSON object with the exact fields: title, description, keywo
             metadata_json = {}
 
         return llm_pb2.AggregateResponse(
-            title=metadata_json.get("title", ""),
             description=metadata_json.get("description", ""),
             keywords=metadata_json.get("keywords", []),
             topic=metadata_json.get("topic", "")
@@ -145,4 +138,12 @@ def serve():
         server.stop(0)
 
 if __name__ == "__main__":
+
+    log = logging.getLogger(__name__)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    logging.Formatter.converter = time.gmtime
     serve()
