@@ -6,7 +6,7 @@ services:
     expose:
       - "11434" 
     volumes:
-      - podcast-data:/root/.ollama
+      - llm-data:/root/.ollama
     networks:
       - podcast-network
 
@@ -40,7 +40,7 @@ services:
   #     - ../data:/app/data
 
 volumes:
-  podcast-data:
+  llm-data:
     external: true
 
 networks:
