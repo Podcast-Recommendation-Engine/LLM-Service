@@ -4,11 +4,14 @@ services:
     image: ollama/ollama:0.3.11
     container_name: ollama
     expose:
-      - "11434" 
+      - "11434"
     volumes:
       - llm-data:/root/.ollama
     networks:
       - podcast-network
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
 
   grpc-server:
     build:
